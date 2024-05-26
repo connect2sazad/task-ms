@@ -1,29 +1,57 @@
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-const Sidebar = () => {
+const Sidebar = ({ styles, selected }) => {
+
+    const menus = [
+        {
+            id: "home",
+            name: "Home",
+            link: "/",
+        },
+        {
+            id: "new-post",
+            name: "New Post",
+            link: "/new-post",
+        },
+        {
+            id: "profile",
+            name: "Profile",
+            link: "/profile",
+        },
+        {
+            id: "settings",
+            name: "Settings",
+            link: "/settings",
+        },
+        {
+            id: "logout",
+            name: "Logout",
+            link: "/logout",
+        },
+    ]
+
     return (
         <>
-            <div className="sidebar">
-                <ul>
-                    <li>
-                        <Link to="http://127.0.0.1/tms/">Dashboard</Link>
-                    </li>
-                    <li>
-                        <Link to="http://127.0.0.1/tms/add-new-task">Add new Task</Link>
-                    </li>
-                    <li>
-                        <Link to="http://127.0.0.1/tms/manage-tasks">Manage Tasks</Link>
-                    </li>
-                    <li>
-                        <Link to="http://127.0.0.1/tms/settings">Settings</Link>
-                    </li>
-                    <li>
-                        <Link to="http://127.0.0.1/tms/logout">Logout</Link>
-                    </li>
-                </ul>
+            <div className={styles}>
+                <div className="d-flex flex-column flex-shrink-0 p-3 bg-light" style={{ minHeight: '81vh' }}>
+
+                    <ul className="nav nav-pills flex-column mb-auto">  
+                        {
+                            menus.map((menu) => (
+                                <li className="nav-item" key={menu.id}>
+                                    <Link to={menu.link} className={`nav-link ${menu.id === selected ? 'active' : 'link-dark'}`} aria-current="page">
+                                        {menu.name}
+                                    </Link>
+                                </li>
+                            ))
+                        }
+                    </ul>
+
+                </div>
             </div>
         </>
     );
-}
+};
 
 export default Sidebar;

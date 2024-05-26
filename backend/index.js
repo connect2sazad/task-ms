@@ -2,15 +2,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql2');
 const cors = require('cors');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 
-const { dbconfig, port } = require('./config');
+const { dbconfig, port, JWT_SECRET_KEY } = require('./config');
 
 const app = express();
 const PORT = process.env.PORT || port;
 
-app.use(express.json());
+app.use(cors());
+app.use(bodyParser.json());
 
 const db = mysql.createConnection(dbconfig);
 
@@ -22,12 +21,16 @@ db.connect((err) => {
     console.log('Connected to MySQL database');
 });
 
+const jwtSecret = JWT_SECRET_KEY;
+
 module.exports = {
     app,
-    db
+    db,
+    jwtSecret
 };
 
-require('./routes/users-test');
+require('./routes/users');
+require('./routes/posts');
 
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);

@@ -1,19 +1,17 @@
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import WebRoutes, { } from './components/webroutes.component';
+import WebRoutes from './components/webroutes.component';
 
-import './assets/css/style001.css'
+// import './assets/css/style001.css'
 import './App.css';
-import { AuthProvider } from './components/auth.component';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
     <>
-      <AuthProvider>
-        <Router>
-          <WebRoutes />
-        </Router>
-      </AuthProvider>
+      <Router>
+        <WebRoutes />
+      </Router>
     </>
   );
 }

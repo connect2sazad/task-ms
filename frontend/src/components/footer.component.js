@@ -1,15 +1,17 @@
+import React from "react";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
     return (
         <>
-            <footer>
-                <div className="copyright">
-                    Copyright &copy; Lyncdigit {new Date().getUTCFullYear()} </div>
-                <div className="lyncdigit">
-                    Powered by <Link to="https://www.lyncdigit.com/" target="_blank">Lyncdigit</Link>
+            <div className="d-flex justify-content-between p-3 bg-dark text-white">
+                <div>
+                    &copy; {new Date().getUTCFullYear()} Lyncdigit. All Rights Reserved.
                 </div>
-            </footer>
+                <div>
+                    Powered by <Link to="https://www.lyncdigit.com/" target="_blank" rel="noopener noreferrer" className="text-white">Lyncdigit</Link>
+                </div>
+            </div>
         </>
     );
 }
