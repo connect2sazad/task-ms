@@ -33,7 +33,7 @@ class NewPostPage extends React.Component {
                     <div className="row">
                         <Sidebar styles="col-md-3 bg-light col-lg-2" selected="new-post" />
                         <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-md-4">
-                            <h4 className="my-4">New Post</h4>
+                            <h4 className="mb-4">New Post</h4>
                             <form>
                                 <div className="mb-3">
                                     <label htmlFor="title" className="form-label">Title</label>
@@ -53,7 +53,7 @@ class NewPostPage extends React.Component {
                                 </div>
                                 <div className="mb-3 form-check">
                                     <input type="checkbox" className="form-check-input" id="is-completed" />
-                                    <label className="form-check-label" htmlFor="is-completed">Is Completed</label>
+                                    <label className="form-check-label" htmlFor="is-completed">Mark as Completed</label>
                                 </div>
                                 <button type="submit" className="btn btn-primary">Submit</button>
                             </form>

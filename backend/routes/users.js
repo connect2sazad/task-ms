@@ -34,7 +34,8 @@ app.post('/login', (req, res) => {
     });
 });
 
-app.post('/register', async (req, res) => {
+// register
+app.post('/users/create', verifyToken, async (req, res) => {
 
     const { first_name, last_name, email, password } = req.body;
 
@@ -51,6 +52,34 @@ app.post('/register', async (req, res) => {
         }
 
         res.status(201).json({ message: 'User registered successfully', id: result.insertId });
+
+    });
+
+});
+
+// list users
+app.get('/users', verifyToken, (req, res) => {
+
+    const query = "SELECT * FROM users WHERE is_deleted = 0";
+
+    db.query(query, [], (err, results) => {
+
+        if (err) {
+
+            return res.status(500).json({ message: "Users not listed", error: err.message });
+
+        }
+
+        // to remove password column
+        const users = results.map(user => {
+            const { password, ...rest } = user;
+            return rest;
+        });
+
+        res.status(201).json({ 
+            message: 'Users listed successfully',
+            users,
+        });
 
     });
 

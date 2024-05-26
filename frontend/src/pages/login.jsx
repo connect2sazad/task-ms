@@ -17,6 +17,7 @@ const LoginPage = () => {
         if (token) {
             navigate('/');
         }
+
     }, [navigate]);
 
     const handleEmail = (e) => {

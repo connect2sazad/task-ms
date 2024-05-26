@@ -15,6 +15,11 @@ const Sidebar = ({ styles, selected }) => {
             link: "/new-post",
         },
         {
+            id: "users",
+            name: "Users",
+            link: "/users",
+        },
+        {
             id: "profile",
             name: "Profile",
             link: "/profile",

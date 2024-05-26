@@ -5,6 +5,7 @@ import LoginPage from '../pages/login';
 import ProfilePage from '../pages/profile';
 import LogoutPage from '../pages/logout';
 import NewPostPage from '../pages/newpost';
+import UsersPage from '../pages/users';
 
 const routes = [
     {
@@ -22,6 +23,10 @@ const routes = [
     {
         page: <NewPostPage/>,
         link: '/new-post'
+    },
+    {
+        page: <UsersPage/>,
+        link: '/users'
     },
     {
         page: <LoginPage/>,

@@ -8,6 +8,7 @@ import Sidebar from "../components/sidebar.component";
 import Footer from "../components/footer.component";
 import PostCard from "../components/postcard.component";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Keywords, Description } from "../components/constants.component";
 
 class HomePage extends React.Component {
 
@@ -18,8 +19,8 @@ class HomePage extends React.Component {
             posts: [],
             head_insiders: {
                 page_title: "Home",
-                keywords: ["Best Site", "Best Site 2", "Best Site 3"],
-                description: 'Test Description'
+                keywords: Keywords,
+                description: Description
             },
         };
     }
