@@ -8,6 +8,9 @@
 
 
 /* custom modal */
+.hidden{
+  display: none;
+}
 .custom-modal {
   display: none; /* Hide modal by default */
   position: fixed; /* Stay in place */

@@ -1,22 +1,27 @@
 import React from 'react';
 import '../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js';
 
-const CustomModal = ({ showModalButton, modalTitle, modalBody, modalFooter, modalSize, showModal, onModalClose }) => {
+const CustomModal = ({ showModalButton, modalTitle, modalBody, modalFooter, modalSize }) => {
+
+    // xl
+    // lg
+    // sm
 
     return (
         <>
+
             {/* <!-- Button trigger modal --> */}
-            <button type="button" className="btn btn-primary" onClick={() => showModal && onModalClose()} data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#customModal">
                 {showModalButton}
             </button>
 
             {/* <!-- Modal --> */}
-            <div className={`modal fade ${showModal ? 'show' : ''}`} id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style={{ display: showModal ? 'block' : 'none' }}>
+            <div className="modal fade" id="customModal" tabIndex="-1" aria-labelledby="customModalLabel" aria-hidden="true">
                 <div className={"modal-dialog modal-dialog-scrollable modal-dialog-centered modal-" + (modalSize ? modalSize : 'sm')}>
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h1 className="modal-title fs-5" id="exampleModalLabel">{modalTitle}</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <h1 className="modal-title fs-5" id="customModalLabel">{modalTitle}</h1>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
                             {modalBody}
@@ -28,9 +33,9 @@ const CustomModal = ({ showModalButton, modalTitle, modalBody, modalFooter, moda
                     </div>
                 </div>
             </div>
+
         </>
     );
 }
-
 
 export default CustomModal;

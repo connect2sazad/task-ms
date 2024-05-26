@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import axios from 'axios'; // Import Axios
+import React, { useState, useRef } from 'react';
+import axios from 'axios';
 
 import CustomModal from './custommodal.component';
 
@@ -12,6 +12,7 @@ const NewUser = ({ onUserCreated }) => {
         userid: ''
     });
     const [showModal, setShowModal] = useState(false);
+    const closeButtonRef = useRef(null);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -19,7 +20,7 @@ const NewUser = ({ onUserCreated }) => {
     };
 
     const handleSubmitUserReg = async (e) => {
-        e.preventDefault(); 
+        e.preventDefault();
 
         const token = localStorage.getItem('token');
 
@@ -37,8 +38,14 @@ const NewUser = ({ onUserCreated }) => {
             });
 
             if (response.status === 201) {
-                onUserCreated(); 
+                onUserCreated(); // Callback to close the modal and refresh user data
                 setShowModal(false); // Close the modal on success
+
+                if (closeButtonRef.current) {
+                    closeButtonRef.current.click();
+                }
+
+                window.location.reload();
             }
 
         } catch (error) {
@@ -53,6 +60,7 @@ const NewUser = ({ onUserCreated }) => {
                 showModalButton="New User"
                 modalTitle="Create New User"
                 showModal={showModal}
+                onShowModalChange={setShowModal} // Pass the state setter
                 onModalClose={() => setShowModal(false)}
                 modalBody={
                     <NewUserForm
@@ -63,6 +71,7 @@ const NewUser = ({ onUserCreated }) => {
                 modalFooter={
                     <button className="btn btn-primary" onClick={handleSubmitUserReg}>Create</button>
                 }
+                closeButtonRef={closeButtonRef} // Pass the ref to the modal
             />
         </>
     );
@@ -72,69 +81,67 @@ export default NewUser;
 
 const NewUserForm = ({ formData, handleInputChange }) => {
     return (
-        <>
-            <div className="row">
-                <div className="col-6 mb-3">
-                    <label htmlFor="first_name" className="form-label">First Name</label>
-                    <input 
-                        type="text" 
-                        className="form-control" 
-                        id="first_name" 
-                        placeholder="First Name" 
-                        name="first_name"
-                        value={formData.first_name}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                <div className="col-6 mb-3">
-                    <label htmlFor="last_name" className="form-label">Last Name</label>
-                    <input 
-                        type="text" 
-                        className="form-control" 
-                        id="last_name" 
-                        placeholder="Last Name" 
-                        name="last_name"
-                        value={formData.last_name}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                <div className="col-6 mb-3">
-                    <label htmlFor="email" className="form-label">Email</label>
-                    <input 
-                        type="email" 
-                        className="form-control" 
-                        id="email" 
-                        placeholder="Email" 
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                <div className="col-6 mb-3">
-                    <label htmlFor="password" className="form-label">Password</label>
-                    <input 
-                        type="password" 
-                        className="form-control" 
-                        id="password" 
-                        placeholder="Password" 
-                        name="password"
-                        value={formData.password}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                <div className="col-6 mb-3">
-                    <label htmlFor="userid" className="form-label">Userid</label>
-                    <input 
-                        type="text" 
-                        className="form-control" 
-                        id="userid" 
-                        placeholder="userid" 
-                        name="userid"
-                        value={formData.userid}
-                        onChange={handleInputChange}
-                    />
-                </div>
+        <div className="row">
+            <div className="col-6 mb-3">
+                <label htmlFor="first_name" className="form-label">First Name</label>
+                <input 
+                    type="text" 
+                    className="form-control" 
+                    id="first_name" 
+                    placeholder="First Name" 
+                    name="first_name"
+                    value={formData.first_name}
+                    onChange={handleInputChange}
+                />
             </div>
-        </>
+            <div className="col-6 mb-3">
+                <label htmlFor="last_name" className="form-label">Last Name</label>
+                <input 
+                    type="text" 
+                    className="form-control" 
+                    id="last_name" 
+                    placeholder="Last Name" 
+                    name="last_name"
+                    value={formData.last_name}
+                    onChange={handleInputChange}
+                />
+            </div>
+            <div className="col-6 mb-3">
+                <label htmlFor="email" className="form-label">Email</label>
+                <input 
+                    type="email" 
+                    className="form-control" 
+                    id="email" 
+                    placeholder="Email" 
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                />
+            </div>
+            <div className="col-6 mb-3">
+                <label htmlFor="password" className="form-label">Password</label>
+                <input 
+                    type="password" 
+                    className="form-control" 
+                    id="password" 
+                    placeholder="Password" 
+                    name="password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                />
+            </div>
+            <div className="col-6 mb-3">
+                <label htmlFor="userid" className="form-label">Userid</label>
+                <input 
+                    type="text" 
+                    className="form-control" 
+                    id="userid" 
+                    placeholder="userid" 
+                    name="userid"
+                    value={formData.userid}
+                    onChange={handleInputChange}
+                />
+            </div>
+        </div>
     );
 }
