@@ -37,13 +37,13 @@ app.post('/login', (req, res) => {
 // register
 app.post('/users/create', verifyToken, async (req, res) => {
 
-    const { first_name, last_name, email, password } = req.body;
+    const { first_name, last_name, email, password, userid } = req.body;
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const query = "INSERT INTO users (first_name, last_name, email, password, role) VALUES (?, ?, ?, ?, 1)";
+    const query = "INSERT INTO users (first_name, last_name, userid, email, password, role) VALUES (?, ?, ?, ?, ?, 1)";
 
-    db.query(query, [first_name, last_name, email, hashedPassword], (err, result) => {
+    db.query(query, [first_name, last_name, userid, email, hashedPassword], (err, result) => {
 
         if (err) {
 

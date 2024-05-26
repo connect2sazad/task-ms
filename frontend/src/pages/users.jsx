@@ -86,14 +86,6 @@ class UsersPage extends React.Component {
         }
     }
 
-    handleShowModal = () => {
-        this.setState({ showModal: true });
-    };
-
-    handleCloseModal = () => {
-        this.setState({ showModal: false });
-    };
-
     render() {
         return (
             <>
@@ -107,7 +99,7 @@ class UsersPage extends React.Component {
                                 {this.state.head_insiders.page_title}
                             </h4>
                             <TableData columns={this.state.columns} data={this.state.data} 
-                                additionalComponent={<NewUser/>} 
+                                additionalComponent={<NewUser onUserCreated={this.fetchUsers} />} 
                             />
                         </main>
                     </div>

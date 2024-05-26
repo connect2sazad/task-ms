@@ -3,13 +3,15 @@ import axios from 'axios'; // Import Axios
 
 import CustomModal from './custommodal.component';
 
-const Newuser = () => {
+const NewUser = ({ onUserCreated }) => {
     const [formData, setFormData] = useState({
         first_name: '',
         last_name: '',
         email: '',
-        password: ''
+        password: '',
+        userid: ''
     });
+    const [showModal, setShowModal] = useState(false);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -17,7 +19,7 @@ const Newuser = () => {
     };
 
     const handleSubmitUserReg = async (e) => {
-        e.preventDefault(); // Prevent default form submission behavior
+        e.preventDefault(); 
 
         const token = localStorage.getItem('token');
 
@@ -26,18 +28,21 @@ const Newuser = () => {
                 first_name: formData.first_name,
                 last_name: formData.last_name,
                 email: formData.email,
-                password: formData.password
+                password: formData.password,
+                userid: formData.userid
             }, {
                 headers: {
                     'Authorization': token
                 }
             });
 
-            console.log(response.data);
-            // Do something with the response, like setting state or redirecting
+            if (response.status === 201) {
+                onUserCreated(); 
+                setShowModal(false); // Close the modal on success
+            }
+
         } catch (error) {
-            console.error('Login failed:', error);
-            // Handle errors, maybe set an error message state or show an alert
+            console.error('Reg failed:', error);
         }
     };
 
@@ -47,6 +52,8 @@ const Newuser = () => {
                 modalSize="lg"
                 showModalButton="New User"
                 modalTitle="Create New User"
+                showModal={showModal}
+                onModalClose={() => setShowModal(false)}
                 modalBody={
                     <NewUserForm
                         formData={formData}
@@ -61,7 +68,7 @@ const Newuser = () => {
     );
 }
 
-export default Newuser;
+export default NewUser;
 
 const NewUserForm = ({ formData, handleInputChange }) => {
     return (
@@ -112,6 +119,18 @@ const NewUserForm = ({ formData, handleInputChange }) => {
                         placeholder="Password" 
                         name="password"
                         value={formData.password}
+                        onChange={handleInputChange}
+                    />
+                </div>
+                <div className="col-6 mb-3">
+                    <label htmlFor="userid" className="form-label">Userid</label>
+                    <input 
+                        type="text" 
+                        className="form-control" 
+                        id="userid" 
+                        placeholder="userid" 
+                        name="userid"
+                        value={formData.userid}
                         onChange={handleInputChange}
                     />
                 </div>
