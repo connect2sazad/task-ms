@@ -6,6 +6,7 @@ import ProfilePage from '../pages/profile';
 import LogoutPage from '../pages/logout';
 import NewPostPage from '../pages/newpost';
 import UsersPage from '../pages/users';
+import UserRolesPage from '../pages/user-roles';
 
 const routes = [
     {
@@ -27,6 +28,10 @@ const routes = [
     {
         page: <UsersPage/>,
         link: '/users'
+    },
+    {
+        page: <UserRolesPage/>,
+        link: '/user-roles'
     },
     {
         page: <LoginPage/>,

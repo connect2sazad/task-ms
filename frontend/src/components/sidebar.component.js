@@ -20,6 +20,11 @@ const Sidebar = ({ styles, selected }) => {
             link: "/users",
         },
         {
+            id: "user-roles",
+            name: "User Roles",
+            link: "/user-roles",
+        },
+        {
             id: "profile",
             name: "Profile",
             link: "/profile",

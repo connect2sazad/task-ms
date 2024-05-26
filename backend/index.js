@@ -31,6 +31,7 @@ module.exports = {
 
 require('./routes/users');
 require('./routes/posts');
+require('./routes/db');
 
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
