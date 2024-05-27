@@ -37,13 +37,13 @@ app.post('/login', (req, res) => {
 // register
 app.post('/users/create', verifyToken, async (req, res) => {
 
-    const { first_name, last_name, email, password, userid } = req.body;
+    const { first_name, last_name, email, password, userid, role } = req.body;
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const query = "INSERT INTO users (first_name, last_name, userid, email, password, role) VALUES (?, ?, ?, ?, ?, 1)";
+    const query = "INSERT INTO users (first_name, last_name, userid, email, password, role) VALUES (?, ?, ?, ?, ?, ?)";
 
-    db.query(query, [first_name, last_name, userid, email, hashedPassword], (err, result) => {
+    db.query(query, [first_name, last_name, userid, email, hashedPassword, role], (err, result) => {
 
         if (err) {
 
@@ -84,6 +84,33 @@ app.get('/users', verifyToken, (req, res) => {
     });
 
 });
+
+
+// list user roles
+app.get('/user-roles', verifyToken, (req, res) => {
+
+    const query = "SELECT * FROM user_roles";
+
+    db.query(query, [], (err, results) => {
+
+        if (err) {
+
+            return res.status(500).json({ message: "User Roles not listed", error: err.message });
+
+        }
+
+        // to remove password column
+        const user_roles = results;
+
+        res.status(201).json({ 
+            message: 'User Roles listed successfully',
+            user_roles,
+        });
+
+    });
+
+});
+
 
 app.get('/verify-auth', verifyToken, (req, res) => {
     res.status(200).json({ message: 'Verified', userid: req.userid });

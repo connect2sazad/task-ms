@@ -33,3 +33,8 @@ export function formatDate(dateString) {
     // Combine date and time parts
     return `${formattedDate}`;
 }
+
+
+export function api(link){
+    return "http://localhost:5555/"+link;
+}

@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import { FaEye, FaPencilAlt, FaPowerOff, FaTimes } from "react-icons/fa";
 
 import withRouter from "../components/withrouter.component";
 import Header from "../components/header.component";
@@ -37,8 +38,16 @@ class UsersPage extends React.Component {
                     selector: (row) => row.handle,
                 },
                 {
+                    name: "Role",
+                    selector: (row) => row.role,
+                },
+                {
                     name: "Last Update",
                     selector: (row) => row.last_update,
+                },
+                {
+                    name: "Actions",
+                    selector: (row) => row.actions,
                 },
             ],
             data: [],
@@ -74,7 +83,16 @@ class UsersPage extends React.Component {
                     name: `${user.first_name} ${user.last_name}`,
                     email: user.email,
                     handle: user.userid,
+                    role: user.role,
                     last_update: formatDate(user.updated_at),
+                    actions: (
+                        <div className="d-flex justify-content-between">
+                            <button className="btn btn-sm btn-outline-primary" onClick={() => this.viewUser(user)}><FaEye/></button>
+                            <button className="btn btn-sm btn-outline-primary" onClick={() => this.editUser(user)}><FaPencilAlt/></button>
+                            <button className="btn btn-sm btn-outline-primary" onClick={() => this.deactivateUser(user)}><FaPowerOff/></button>
+                            <button className="btn btn-sm btn-outline-danger" onClick={() => this.deleteUser(user.id)}><FaTimes/></button>
+                        </div>
+                    )
                 };
             });
 

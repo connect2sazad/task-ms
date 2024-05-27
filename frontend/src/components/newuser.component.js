@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 
 import CustomModal from './custommodal.component';
+import { api } from './constants.component';
 
 const NewUser = ({ onUserCreated }) => {
     const [formData, setFormData] = useState({
@@ -9,10 +10,33 @@ const NewUser = ({ onUserCreated }) => {
         last_name: '',
         email: '',
         password: '',
-        userid: ''
+        userid: '',
+        role: ''
     });
     const [showModal, setShowModal] = useState(false);
     const closeButtonRef = useRef(null);
+    const [userRoles, setUserRoles] = useState([]);
+    const token = localStorage.getItem('token');
+
+    useEffect(() => {
+        const fetchUserRoles = async () => {
+            try {
+                const response = await axios.get(api('user-roles'), {
+                    headers: {
+                        Authorization: token
+                    }
+                });
+                setUserRoles(response.data.user_roles);
+                console.log(response.data.user_roles);
+            } catch (error) {
+                console.error('Error fetching user roles:', error);
+            }
+        };
+
+        if (token) {
+            fetchUserRoles();
+        }
+    }, [token]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -22,18 +46,19 @@ const NewUser = ({ onUserCreated }) => {
     const handleSubmitUserReg = async (e) => {
         e.preventDefault();
 
-        const token = localStorage.getItem('token');
+        console.log(formData);
 
         try {
-            const response = await axios.post('http://localhost:5555/users/create', {
+            const response = await axios.post(api('users/create'), {
                 first_name: formData.first_name,
                 last_name: formData.last_name,
                 email: formData.email,
                 password: formData.password,
-                userid: formData.userid
+                userid: formData.userid,
+                role: formData.role,
             }, {
                 headers: {
-                    'Authorization': token
+                    Authorization: token
                 }
             });
 
@@ -49,7 +74,7 @@ const NewUser = ({ onUserCreated }) => {
             }
 
         } catch (error) {
-            console.error('Reg failed:', error);
+            console.error('Registration failed:', error);
         }
     };
 
@@ -66,6 +91,7 @@ const NewUser = ({ onUserCreated }) => {
                     <NewUserForm
                         formData={formData}
                         handleInputChange={handleInputChange}
+                        userRoles={userRoles} // Pass userRoles to the form
                     />
                 }
                 modalFooter={
@@ -79,7 +105,7 @@ const NewUser = ({ onUserCreated }) => {
 
 export default NewUser;
 
-const NewUserForm = ({ formData, handleInputChange }) => {
+const NewUserForm = ({ formData, handleInputChange, userRoles }) => {
     return (
         <div className="row">
             <div className="col-6 mb-3">
@@ -136,12 +162,31 @@ const NewUserForm = ({ formData, handleInputChange }) => {
                     type="text" 
                     className="form-control" 
                     id="userid" 
-                    placeholder="userid" 
+                    placeholder="User ID" 
                     name="userid"
                     value={formData.userid}
                     onChange={handleInputChange}
                 />
             </div>
+            {userRoles.length > 0 && (
+                <div className="col-6 mb-3">
+                    <label htmlFor="role" className="form-label">User Role</label>
+                    <select 
+                        className="form-control" 
+                        id="role" 
+                        name="role"
+                        value={formData.role || ''}
+                        onChange={handleInputChange}
+                    >
+                        <option value="">Select a role</option>
+                        {userRoles.map((role) => (
+                            <option key={role.id} value={role.role}>
+                                {role.name + " - " + role.role}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            )}
         </div>
     );
 }

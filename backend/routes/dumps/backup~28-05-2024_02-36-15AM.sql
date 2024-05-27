@@ -34,6 +34,20 @@ CREATE TABLE `posts` (
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 # ------------------------------------------------------------
+# SCHEMA DUMP FOR TABLE: user_roles
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `user_roles`;
+CREATE TABLE `user_roles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `role` varchar(50) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `permissions` mediumtext DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `role` (`role`)
+) ENGINE = InnoDB AUTO_INCREMENT = 3 DEFAULT CHARSET = utf8mb4;
+
+# ------------------------------------------------------------
 # SCHEMA DUMP FOR TABLE: users
 # ------------------------------------------------------------
 
@@ -44,7 +58,7 @@ CREATE TABLE `users` (
   `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `role` int(11) NOT NULL,
+  `role` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
   `last_login` timestamp NOT NULL DEFAULT current_timestamp(),
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -53,8 +67,10 @@ CREATE TABLE `users` (
   `is_deleted` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `userid` (`userid`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE = InnoDB AUTO_INCREMENT = 46 DEFAULT CHARSET = utf8mb4;
+  UNIQUE KEY `email` (`email`),
+  KEY `users_ibfk_1` (`role`),
+  CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role`) REFERENCES `user_roles` (`role`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB AUTO_INCREMENT = 50 DEFAULT CHARSET = utf8mb4;
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
