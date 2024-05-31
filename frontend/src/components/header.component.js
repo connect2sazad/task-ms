@@ -22,6 +22,8 @@ const Header = () => {
                 if (response.status === 200) {
                     setUser(response.data.userid);
                 } else {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('userid');
                     navigate('/login');
                 }
 

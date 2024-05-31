@@ -34,6 +34,10 @@ const routes = [
         link: '/user-roles'
     },
     {
+        page: <ProfilePage/>,
+        link: '/profile/:userid'
+    },
+    {
         page: <LoginPage/>,
         link: '/login'
     },

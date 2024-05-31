@@ -27,7 +27,7 @@ const NewUser = ({ onUserCreated }) => {
                     }
                 });
                 setUserRoles(response.data.user_roles);
-                console.log(response.data.user_roles);
+                // console.log(response.data.user_roles);
             } catch (error) {
                 console.error('Error fetching user roles:', error);
             }

@@ -64,3 +64,7 @@
   text-decoration: none;
   cursor: pointer;
 }
+
+.table-danger {
+  background-color: #f8d7da;
+}

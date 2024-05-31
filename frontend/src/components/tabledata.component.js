@@ -7,13 +7,11 @@ const TableData = ({ styles, columns, data, additionalComponent }) => {
     const [sortColumn, setSortColumn] = useState(null);
     const [sortOrder, setSortOrder] = useState('asc');
 
-    // Function to reset current page to 1 when search term changes
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
         setCurrentPage(1);
     };
 
-    // Function to sort data based on column and order
     const sortedData = () => {
         if (!sortColumn) return data;
         return data.slice().sort((a, b) => {
@@ -25,42 +23,35 @@ const TableData = ({ styles, columns, data, additionalComponent }) => {
         });
     };
 
-    // Filter and sort data based on search term, column, and order
     const filteredAndSortedData = sortedData().filter(row =>
         columns.some(column =>
             String(column.selector(row)).toLowerCase().includes(searchTerm.toLowerCase())
         )
     );
 
-    // Calculate pagination
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = filteredAndSortedData.slice(indexOfFirstItem, indexOfLastItem);
 
-    // Change page
     const paginate = pageNumber => setCurrentPage(pageNumber);
 
-    // Handle select menu change
     const handleItemsPerPageChange = e => {
         setItemsPerPage(parseInt(e.target.value));
         setCurrentPage(1);
     };
 
-    // Next page
     const nextPage = () => {
         if (currentPage < Math.ceil(filteredAndSortedData.length / itemsPerPage)) {
             setCurrentPage(currentPage + 1);
         }
     };
 
-    // Previous page
     const prevPage = () => {
         if (currentPage > 1) {
             setCurrentPage(currentPage - 1);
         }
     };
 
-    // Function to handle column sorting
     const handleColumnSort = (column) => {
         if (sortColumn === column) {
             setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -72,7 +63,6 @@ const TableData = ({ styles, columns, data, additionalComponent }) => {
 
     return (
         <>
-            {/* Search and items per page select */}
             <div className="row my-3">
                 <div className="col-3">
                     <input
@@ -89,14 +79,12 @@ const TableData = ({ styles, columns, data, additionalComponent }) => {
                         <option value="5">5 rows per page</option>
                         <option value="10">10 rows per page</option>
                         <option value="15">20 rows per page</option>
-                        <option value="15">50 rows per page</option>
-                        <option value="15">100 rows per page</option>
-                        {/* Add more options as needed */}
+                        <option value="50">50 rows per page</option>
+                        <option value="100">100 rows per page</option>
                     </select>
                 </div>
             </div>
 
-            {/* Table */}
             <table className={styles ? styles : "table table-light table-hover"}>
                 <thead>
                     <tr>
@@ -112,7 +100,7 @@ const TableData = ({ styles, columns, data, additionalComponent }) => {
                 </thead>
                 <tbody>
                     {currentItems.map((row, rowIndex) => (
-                        <tr key={rowIndex}>
+                        <tr key={rowIndex} className={(row.is_active!=="Active") ? 'table-danger' : ''}>
                             {columns.map((column, colIndex) => (
                                 <td key={colIndex}>{column.selector(row)}</td>
                             ))}
@@ -121,7 +109,6 @@ const TableData = ({ styles, columns, data, additionalComponent }) => {
                 </tbody>
             </table>
 
-            {/* Pagination */}
             <nav aria-label="Pagination">
                 <ul className="pagination justify-content-center">
                     <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>

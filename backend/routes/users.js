@@ -76,9 +76,68 @@ app.get('/users', verifyToken, (req, res) => {
             return rest;
         });
 
-        res.status(201).json({ 
+        res.status(201).json({
             message: 'Users listed successfully',
             users,
+        });
+
+    });
+
+});
+
+// list users
+app.get('/users/:userid', verifyToken, (req, res) => {
+
+    const { userid } = req.params;
+
+    const query = "SELECT * FROM users WHERE userid = ?";
+
+    db.query(query, [userid], (err, results) => {
+
+        if (err) {
+
+            return res.status(500).json({ message: "User not listed", error: err.message });
+
+        }
+
+        // to remove password column
+        const user = results[0];
+
+        res.status(201).json({
+            message: 'Users listed successfully',
+            user
+        });
+
+    });
+
+});
+
+
+// change status
+app.put('/users/:userid/status', verifyToken, (req, res) => {
+
+    const { userid } = req.params;
+
+    const { column } = req.body;
+
+    const query = `
+    UPDATE users
+    SET ${column} = CASE 
+    WHEN ${column} = 1 THEN 0 
+    ELSE 1 
+    END  
+    WHERE users.userid = ?;`;
+
+    db.query(query, [userid], (err, results) => {
+
+        if (err) {
+
+            return res.status(500).json({ message: "User not updated", error: err.message });
+
+        }
+
+        res.status(201).json({
+            message: 'Users updated successfully',
         });
 
     });
@@ -89,7 +148,7 @@ app.get('/users', verifyToken, (req, res) => {
 // list user roles
 app.get('/user-roles', verifyToken, (req, res) => {
 
-    const query = "SELECT * FROM user_roles";
+    const query = "SELECT * FROM user_roles WHERE is_deleted = 0;";
 
     db.query(query, [], (err, results) => {
 
@@ -102,9 +161,43 @@ app.get('/user-roles', verifyToken, (req, res) => {
         // to remove password column
         const user_roles = results;
 
-        res.status(201).json({ 
+        res.status(201).json({
             message: 'User Roles listed successfully',
             user_roles,
+        });
+
+    });
+
+});
+
+// change status
+app.put('/user-roles/:id/status', verifyToken, (req, res) => {
+
+    const { id } = req.params;
+
+    const { column } = req.body;
+
+    const query = `
+    UPDATE user_roles
+    SET ${column} = CASE 
+    WHEN ${column} = 1 THEN 0 
+    ELSE 1 
+    END  
+    WHERE user_roles.id = ?;`;
+
+    db.query(query, [id], (err, results) => {
+
+        if (err) {
+
+            return res.status(500).json({
+                message: "User Role not updated",
+                error: err.message
+            });
+
+        }
+
+        res.status(201).json({
+            message: 'User Role updated successfully',
         });
 
     });

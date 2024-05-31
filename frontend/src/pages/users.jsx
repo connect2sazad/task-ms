@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import { ClipLoader } from "react-spinners";
 import { FaEye, FaPencilAlt, FaPowerOff, FaTimes } from "react-icons/fa";
 
 import withRouter from "../components/withrouter.component";
@@ -10,6 +11,7 @@ import WebHead from "../components/webhead.component";
 import TableData from "../components/tabledata.component";
 import { Description, Keywords, formatDate } from "../components/constants.component";
 import NewUser from "../components/newuser.component";
+import SetStatus from "../components/setstatus.component";
 
 class UsersPage extends React.Component {
     constructor(props) {
@@ -20,6 +22,7 @@ class UsersPage extends React.Component {
                 keywords: Keywords,
                 description: Description,
             },
+            loading: true,
             columns: [
                 {
                     name: "#",
@@ -38,6 +41,10 @@ class UsersPage extends React.Component {
                     selector: (row) => row.handle,
                 },
                 {
+                    name: "Status",
+                    selector: (row) => row.is_active,
+                },
+                {
                     name: "Role",
                     selector: (row) => row.role,
                 },
@@ -53,6 +60,7 @@ class UsersPage extends React.Component {
             data: [],
             showModal: false,
         };
+        // this.fetchUsers =  this.
     }
 
     componentDidMount() {
@@ -68,8 +76,9 @@ class UsersPage extends React.Component {
                     'Authorization': token
                 }
             });
-            this.setState({ 
-                message: response.data.message, 
+            this.setState({
+                message: response.data.message,
+                loading: false
                 // posts: response.data.posts 
             });
 
@@ -84,13 +93,14 @@ class UsersPage extends React.Component {
                     email: user.email,
                     handle: user.userid,
                     role: user.role,
+                    is_active: user.is_active ? 'Active' : 'Inactive',
                     last_update: formatDate(user.updated_at),
                     actions: (
                         <div className="d-flex justify-content-between">
-                            <button className="btn btn-sm btn-outline-primary" onClick={() => this.viewUser(user)}><FaEye/></button>
-                            <button className="btn btn-sm btn-outline-primary" onClick={() => this.editUser(user)}><FaPencilAlt/></button>
-                            <button className="btn btn-sm btn-outline-primary" onClick={() => this.deactivateUser(user)}><FaPowerOff/></button>
-                            <button className="btn btn-sm btn-outline-danger" onClick={() => this.deleteUser(user.id)}><FaTimes/></button>
+                            <button className="btn btn-sm btn-outline-primary" onClick={() => this.viewUser(user.userid)}><FaEye /></button>
+                            <button className="btn btn-sm btn-outline-secondary" onClick={() => this.editUser(user.userid)}><FaPencilAlt /></button>
+                            <button className="btn btn-sm btn-outline-dark" onClick={() => SetStatus('users', user.userid, 'is_active', this.fetchUsers)}><FaPowerOff /></button>
+                            <button className="btn btn-sm btn-outline-danger" onClick={() => SetStatus('users', user.userid, 'is_deleted', this.fetchUsers)}><FaTimes /></button>
                         </div>
                     )
                 };
@@ -99,9 +109,20 @@ class UsersPage extends React.Component {
             this.setState({ data: formattedUsers });
 
         } catch (error) {
-            this.setState({ message: `Failed to load profile: ${error.response?.data?.message || error.message}` });
-            this.props.navigate('/login');
+            this.setState({
+                message: `Failed to load profile: ${error.response?.data?.message || error.message}`,
+                loading: false
+            });
+            this.props.router.navigate('/login');
         }
+    }
+
+    viewUser = (userid) => {
+        this.props.router.navigate(`/profile/${userid}`);
+    }   
+
+    editUser = (userid) => {
+
     }
 
     render() {
@@ -116,14 +137,23 @@ class UsersPage extends React.Component {
                             <h4 className="mb-4">
                                 {this.state.head_insiders.page_title}
                             </h4>
-                            <TableData columns={this.state.columns} data={this.state.data} 
-                                additionalComponent={<NewUser onUserCreated={this.fetchUsers} />} 
-                            />
+                            {
+                                this.state.loading
+                                    ?
+                                    <div className="d-flex justify-content-center w-100">
+                                        <ClipLoader size={50} color={"#123abc"} loading={this.state.loading} />
+                                    </div>
+                                    :
+                                    <TableData columns={this.state.columns} data={this.state.data}
+                                        additionalComponent={<NewUser onUserCreated={this.fetchUsers} />}
+                                    />
+                            }
+
                         </main>
                     </div>
                 </div>
                 <Footer />
-                
+
             </>
         );
     }
