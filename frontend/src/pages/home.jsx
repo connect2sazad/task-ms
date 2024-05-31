@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import { ClipLoader } from "react-spinners"; // Import the ClipLoader from react-spinners
 
 import withRouter from '../components/withrouter.component';
@@ -8,7 +7,8 @@ import Header from "../components/header.component";
 import Sidebar from "../components/sidebar.component";
 import Footer from "../components/footer.component";
 import PostCard from "../components/postcard.component";
-import { Keywords, Description, api } from "../components/constants.component";
+import { Keywords, Description } from "../components/constants.component";
+import PostService from "../services/posts.service";
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -30,26 +30,20 @@ class HomePage extends React.Component {
     }
 
     fetchPosts = async () => {
-        const token = localStorage.getItem('token');
+        const postService = new PostService();
 
         try {
-            const response = await axios.get(api('posts'), {
-                headers: {
-                    'Authorization': token
-                }
-            });
-            this.setState({ 
-                message: response.data.message, 
-                posts: response.data.posts,
-                loading: false // Set loading to false after data is fetched
+            const posts = await postService.getAllPosts();
+            this.setState({
+                posts: posts,
+                loading: false,
+                message: ''
             });
         } catch (error) {
-            this.setState({ 
-                message: `Failed to load posts: ${error.response?.data?.message || error.message}`,
-                loading: false // Set loading to false in case of error
+            this.setState({
+                loading: false,
+                message: 'Error fetching posts'
             });
-            // this.props.navigate('/login');
-            this.props.router.navigate('/login');
         }
     }
 

@@ -34,7 +34,8 @@ export function formatDate(dateString) {
     return `${formattedDate}`;
 }
 
+export const BACKEND_PORT = 5555;
 
 export function api(link){
-    return "http://localhost:5555/"+link;
+    return `http://localhost:${BACKEND_PORT}/${link}`;
 }

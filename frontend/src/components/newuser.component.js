@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import CustomModal from './custommodal.component';
 import { api } from './constants.component';
+import UserService from '../services/users.service';
 
 const NewUser = ({ onUserCreated }) => {
     const [formData, setFormData] = useState({
@@ -17,6 +18,7 @@ const NewUser = ({ onUserCreated }) => {
     const closeButtonRef = useRef(null);
     const [userRoles, setUserRoles] = useState([]);
     const token = localStorage.getItem('token');
+    const userService = new UserService();
 
     useEffect(() => {
         const fetchUserRoles = async () => {
@@ -46,20 +48,15 @@ const NewUser = ({ onUserCreated }) => {
     const handleSubmitUserReg = async (e) => {
         e.preventDefault();
 
-        console.log(formData);
+        try{
 
-        try {
-            const response = await axios.post(api('users/create'), {
+            const response = await userService.createUser({
                 first_name: formData.first_name,
                 last_name: formData.last_name,
                 email: formData.email,
                 password: formData.password,
                 userid: formData.userid,
                 role: formData.role,
-            }, {
-                headers: {
-                    Authorization: token
-                }
             });
 
             if (response.status === 201) {

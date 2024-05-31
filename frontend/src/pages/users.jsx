@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import { ClipLoader } from "react-spinners";
 import { FaEye, FaPencilAlt, FaPowerOff, FaTimes } from "react-icons/fa";
 
@@ -12,6 +11,7 @@ import TableData from "../components/tabledata.component";
 import { Description, Keywords, formatDate } from "../components/constants.component";
 import NewUser from "../components/newuser.component";
 import SetStatus from "../components/setstatus.component";
+import UserService from "../services/users.service";
 
 class UsersPage extends React.Component {
     constructor(props) {
@@ -59,8 +59,8 @@ class UsersPage extends React.Component {
             ],
             data: [],
             showModal: false,
-        };
-        // this.fetchUsers =  this.
+        };        
+        this.userService = new UserService();
     }
 
     componentDidMount() {
@@ -68,21 +68,14 @@ class UsersPage extends React.Component {
     }
 
     fetchUsers = async () => {
-        const token = localStorage.getItem('token');
 
         try {
-            const response = await axios.get('http://localhost:5555/users', {
-                headers: {
-                    'Authorization': token
-                }
-            });
+            const users = await this.userService.getAllUsers();
             this.setState({
-                message: response.data.message,
                 loading: false
-                // posts: response.data.posts 
+                // posts: response.data.posts
             });
 
-            const users = response.data.users;
             let count = 0;
 
             const formattedUsers = users.map((user, index) => {
@@ -107,22 +100,23 @@ class UsersPage extends React.Component {
             });
 
             this.setState({ data: formattedUsers });
-
         } catch (error) {
             this.setState({
-                message: `Failed to load profile: ${error.response?.data?.message || error.message}`,
+                message: `Failed to load users: ${error.response?.data?.message || error.message}`,
                 loading: false
             });
-            this.props.router.navigate('/login');
+            // this.props.router.navigate('/login');
         }
+
+       
     }
 
     viewUser = (userid) => {
         this.props.router.navigate(`/profile/${userid}`);
-    }   
+    }
 
     editUser = (userid) => {
-
+        
     }
 
     render() {
